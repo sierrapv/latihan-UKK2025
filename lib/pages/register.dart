@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: EdgeInsets.symmetric(horizontal: defaultMargin),
           children: [
             Image.asset('assets/images/2968290.jpg',
-                height: 350, fit: BoxFit.fill),
+                height: 350, fit: BoxFit.contain),
             const SizedBox(height: 15),
             Text("Buat Akun Baru!", style: secondTextStyle),
             const SizedBox(height: 20),

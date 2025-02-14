@@ -34,80 +34,89 @@ class _PelangganPageState extends State<PelangganPage> {
 
   // Add a new customer
   void _tambahPelanggan() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        TextEditingController namaController = TextEditingController();
-        TextEditingController alamatController = TextEditingController();
-        TextEditingController kontakController = TextEditingController();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      TextEditingController namaController = TextEditingController();
+      TextEditingController alamatController = TextEditingController();
+      TextEditingController kontakController = TextEditingController();
 
-        Future _addPelanggan() async {
-          final nama = namaController.text;
-          final alamat = alamatController.text;
-          final kontak = kontakController.text;
+      Future _addPelanggan() async {
+        final nama = namaController.text;
+        final alamat = alamatController.text;
+        final kontak = kontakController.text;
 
-          final response = await supabase.from('pelanggan').insert({
-            'nama': nama,
-            'alamat': alamat,
-            'noTelp': kontak,
-          });
+        final response = await supabase.from('pelanggan').insert({
+          'nama': nama,
+          'alamat': alamat,
+          'noTelp': kontak,
+        });
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Pelanggan berhasil ditambahkan!')),
-          );
-
-          fetchPelanggan();
-          Navigator.pop(context);
-        }
-
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          title:
-              Text("Tambah Pelanggan", style: TextStyle(color: secondaryColor)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: namaController,
-                decoration: InputDecoration(
-                    labelText: "Nama Pelanggan",
-                    labelStyle: TextStyle(color: secondaryColor)),
-              ),
-              TextField(
-                controller: alamatController,
-                decoration: InputDecoration(
-                    labelText: "Alamat",
-                    labelStyle: TextStyle(color: secondaryColor)),
-              ),
-              TextField(
-                controller: kontakController,
-                decoration: InputDecoration(
-                    labelText: "No. Telepon",
-                    labelStyle: TextStyle(color: secondaryColor)),
-                keyboardType: TextInputType.phone,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Batal", style: TextStyle(color: secondaryColor)),
-            ),
-            TextButton(
-              onPressed: _addPelanggan,
-              child: Text("Simpan",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: secondaryColor)),
-            ),
-          ],
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Pelanggan berhasil ditambahkan!')),
         );
-      },
-    );
-  }
+
+        fetchPelanggan();
+        Navigator.pop(context);
+      }
+
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        title: Center(
+          child: Text(
+            "Tambah Pelanggan",
+            style: secondTextStyle.copyWith(fontSize: 18),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            buildTextField("Nama Pelanggan", namaController),
+            SizedBox(height: 10),
+            buildTextField("Alamat", alamatController),
+            SizedBox(height: 10),
+            buildTextField("No. Telepon", kontakController),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red[900],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: Text("Batal", style: TextStyle(color: Colors.white)),
+          ),
+          SizedBox(width: 10),
+          ElevatedButton(
+            onPressed: _addPelanggan,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.indigo[900],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: Text("Simpan", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      );
+    },
+  );
+}
+  // Fungsi reusable untuk membuat TextField dengan label
+Widget buildTextField(String label, TextEditingController controller, {bool isNumeric = false}) {
+  return TextField(
+    controller: controller,
+    keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+    decoration: InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+  );
+}
 
   void _editPelanggan(Map<String, dynamic> pelanggan) {
     showDialog(
@@ -148,46 +157,43 @@ class _PelangganPageState extends State<PelangganPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          title:
-              Text("Edit Pelanggan", style: TextStyle(color: secondaryColor)),
+          title: Center(
+            child: Text(
+              "Edit Pelanggan", style: secondTextStyle.copyWith(fontSize: 18),
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: namaController,
-                decoration: InputDecoration(
-                    labelText: "Nama Pelanggan",
-                    labelStyle: TextStyle(color: secondaryColor)),
-              ),
-              TextField(
-                controller: alamatController,
-                decoration: InputDecoration(
-                    labelText: "Alamat",
-                    labelStyle: TextStyle(color: secondaryColor)),
-              ),
-              TextField(
-                controller: kontakController,
-                decoration: InputDecoration(
-                    labelText: "No. Telepon",
-                    labelStyle: TextStyle(color: secondaryColor)),
-                keyboardType: TextInputType.phone,
-              ),
+              buildTextField("Nama Pelanggan", namaController),
+              SizedBox(height: 10),
+              buildTextField("Alamat", alamatController),
+              SizedBox(height: 10),
+              buildTextField("No. Telepon", kontakController),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Batal", style: TextStyle(color: secondaryColor)),
+          actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red[900],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
-            TextButton(
-              onPressed: _updatePelanggan,
-              child: Text("Simpan",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: secondaryColor)),
+            child: Text("Batal", style: TextStyle(color: Colors.white)),
+          ),
+          SizedBox(width: 10),
+          ElevatedButton(
+            onPressed: _updatePelanggan,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.indigo[900],
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
-          ],
+            child: Text("Simpan", style: TextStyle(color: Colors.white)),
+          ),
+        ],
         );
       },
     );
@@ -216,25 +222,52 @@ class _PelangganPageState extends State<PelangganPage> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           title:
-              Text("Edit Pelanggan", style: TextStyle(color: secondaryColor)),
+              Text("Hapus Pelanggan", 
+              textAlign: TextAlign.center,
+              style: secondTextStyle.copyWith(fontSize: 18)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [Text("Anda yakin ingin menghapus pelanggan ini?")],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Batal", style: TextStyle(color: secondaryColor)),
-            ),
-            TextButton(
-              onPressed: () => _destroyPelanggan(pelanggan['id']),
-              child: Text("Hapus",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: secondaryColor)),
-            ),
-          ],
+            children: [Text("Anda yakin ingin menghapus pelanggan ini?",
+            textAlign: TextAlign.center,
+            style: sevenTextStyle,),
+            SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 80, // Lebar tetap
+                        height: 40, // Tinggi tetap
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.indigo[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                          child: Text("Tidak",
+                            style:
+                              TextStyle(color: whiteColor, fontSize: 14)),
+                            ),
+                          ),
+                      SizedBox(
+                        width: 80, // Lebar tetap
+                        height: 40, // Tinggi tetap
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                          onPressed: () => _destroyPelanggan(pelanggan['id']),
+                          child: Text("Iya",
+                              style:
+                                  TextStyle(color: whiteColor, fontSize: 14)),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
         );
       },
     );
@@ -286,7 +319,8 @@ class _PelangganPageState extends State<PelangganPage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add_circle, color: secondaryColor, size: 28),
+                  icon: Icon(Icons.add_circle, 
+                  color: fourthColor, size: 38),
                   onPressed: _tambahPelanggan,
                 ),
               ],
@@ -317,7 +351,7 @@ class _PelangganPageState extends State<PelangganPage> {
                     title: Text(
                       pelanggan['nama'],
                       style: sevenTextStyle.copyWith(
-                          fontWeight: FontWeight.bold, color: secondaryColor),
+                          fontWeight: FontWeight.bold, fontSize: 16, color: secondaryColor),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

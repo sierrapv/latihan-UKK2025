@@ -45,7 +45,7 @@ class _WelcomepagesState extends State<Welcomepages> {
           padding: EdgeInsets.symmetric(horizontal: defaultMargin),
           children: [
             Image.asset('assets/images/4860253.jpg',
-                height: 250, fit: BoxFit.fill),
+                height: 250, width: double.infinity, fit: BoxFit.contain),
             const SizedBox(
               height: 15,
             ),

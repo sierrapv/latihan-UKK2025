@@ -59,7 +59,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                         )),
               );
             },
-            icon: Icon(Icons.chevron_left)),
+            icon: Icon(Icons.chevron_left, color: whiteColor,)),
       ),
       body: Center(
         child: Container(

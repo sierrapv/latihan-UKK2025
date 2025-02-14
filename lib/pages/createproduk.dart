@@ -69,15 +69,35 @@ class _CreateProductPageState extends State<CreateProductPage> {
               _buildTextField(_priceController, "Harga Produk", isNumber: true),
               SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text("Batal", style: TextStyle(color: Colors.red)),
+                  SizedBox(
+                    width: 100, // Lebar tetap
+                    height: 40, // Tinggi tetap
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                      child: Text("Batal",
+                          style: TextStyle(color: whiteColor, fontSize: 14)),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: _saveProduct,
-                    child: Text("Simpan Produk"),
+                  SizedBox(
+                    width: 100, // Lebar tetap
+                    height: 40, // Tinggi tetap
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                      onPressed: _saveProduct,
+                      child: Text("Simpan",
+                          style: TextStyle(color: whiteColor, fontSize: 14)),
+                    ),
                   ),
                 ],
               ),

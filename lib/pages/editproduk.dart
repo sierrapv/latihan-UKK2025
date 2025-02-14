@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:latihankasirapp/components/bottombar.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:latihankasirapp/pages/theme.dart';
 import 'package:latihankasirapp/pages/homepage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:latihankasirapp/components/bottombar.dart';
 
 class EditProductPage extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -61,18 +60,19 @@ class _EditProductPageState extends State<EditProductPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8), // Tambahkan padding agar tidak terlalu penuh
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Edit Produk", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
               _buildTextField(_nameController, "Nama Produk"),
               SizedBox(height: 10),
               _buildTextField(_stockController, "Stok Produk", isNumber: true),
@@ -80,15 +80,31 @@ class _EditProductPageState extends State<EditProductPage> {
               _buildTextField(_priceController, "Harga Produk", isNumber: true),
               SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text("Batal", style: TextStyle(color: Colors.red)),
+                  SizedBox(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Batal",
+                          style: TextStyle(color: whiteColor)),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: _saveProduct,
-                    child: Text("Simpan"),
+                  SizedBox(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: _saveProduct,
+                      child: Text("Simpan",
+                          style: TextStyle(color: whiteColor)),
+                    ),
                   ),
                 ],
               ),
@@ -99,7 +115,7 @@ class _EditProductPageState extends State<EditProductPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
+  Widget _buildTextField(TextEditingController controller, String label,{bool isNumber = false}) {
     return TextFormField(
       controller: controller,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,

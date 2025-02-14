@@ -57,7 +57,12 @@ class ItemWidgetState extends State<ItemWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Produk'),
+          title: Text(
+            'Edit Produk',
+            textAlign: TextAlign.center,
+            style: secondTextStyle.copyWith(
+                fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           content: EditProductPage(
               product: product, onProductUpdated: fetchProducts),
         );
@@ -70,23 +75,55 @@ class ItemWidgetState extends State<ItemWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Delete Produk'),
+          title: Text(
+            'Hapus Produk',
+            textAlign: TextAlign.center,
+            style: secondTextStyle.copyWith(
+                fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           content: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  Text("Anda yakin ingin menghapus produk ini?"),
+                  Text(
+                    "Anda yakin ingin menghapus produk ini?",
+                    textAlign: TextAlign.center,
+                    style: sevenTextStyle,
+                  ),
+                  SizedBox(height: 10),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child:
-                            Text("Batal", style: TextStyle(color: Colors.red)),
+                      SizedBox(
+                        width: 80, // Lebar tetap
+                        height: 40, // Tinggi tetap
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.indigo[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                          child: Text("Tidak",
+                              style:
+                                  TextStyle(color: whiteColor, fontSize: 14)),
+                        ),
                       ),
-                      ElevatedButton(
-                        onPressed: () => deleteProduct(product['id']),
-                        child: Text("Hapus"),
+                      SizedBox(
+                        width: 80, // Lebar tetap
+                        height: 40, // Tinggi tetap
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                          onPressed: () => deleteProduct(product['id']),
+                          child: Text("Iya",
+                              style:
+                                  TextStyle(color: whiteColor, fontSize: 14)),
+                        ),
                       ),
                     ],
                   )
@@ -140,26 +177,38 @@ class ItemWidgetState extends State<ItemWidget> {
                     children: [
                       Text(product['name'], style: thirdTextStyle),
                       SizedBox(height: 8),
-                      Text("Harga: ${formatRupiah(product['price'])}", style: fiveTextStyle),
-                      SizedBox(height: 6),
-                      Text("Stok: ${product['stock']}", style: fiveTextStyle),
-                      SizedBox(height: 10),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Harga: ${formatRupiah(product['price'])}",
+                                    style: fiveTextStyle),
+                                SizedBox(height: 6),
+                                Text("Stok: ${product['stock']}",
+                                    style: fiveTextStyle),
+                              ],
+                            ),
+                          ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                color: Colors.blue[900],
-                                onPressed: () =>
-                                    showEditDialog(context, product),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.delete),
-                                color: Colors.red[900],
-                                onPressed: () =>
-                                    showDeleteDialog(context, product),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    color: Colors.blue[900],
+                                    onPressed: () =>
+                                        showEditDialog(context, product),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    color: Colors.red[900],
+                                    onPressed: () =>
+                                        showDeleteDialog(context, product),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

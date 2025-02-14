@@ -86,26 +86,54 @@ class _RiwayatTransaksiState extends State<RiwayatTransaksi> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Hapus Transaksi'),
+          title: Text("Hapus Transaksi",
+          textAlign: TextAlign.center,
+          style: secondTextStyle.copyWith(fontSize: 18),
+          ),
           content: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  Text("Anda yakin ingin menghapus riwayat transaksi ini?"),
+                  Text("Anda yakin ingin menghapus riwayat transaksi ini?",
+                  textAlign: TextAlign.center,
+                  style: sevenTextStyle,
+                  ),
+                  SizedBox(height: 20),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
+                      SizedBox(
+                      width: 80,
+                      height: 40,
+                      child: TextButton(
                         onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.indigo[900],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                        ),
                         child:
-                            Text("Batal", style: TextStyle(color: Colors.red)),
+                            Text("Tidak", style: TextStyle(color: whiteColor)),
                       ),
-                      ElevatedButton(
+                    ),
+                      SizedBox(
+                      width: 80,
+                      height: 40,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red[900],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        ),
                         onPressed: () {
                           deleteTransaction(transactionId);
                           Navigator.pop(context);
                         },
-                        child: Text("Hapus"),
+                        child: Text("Iya", style: TextStyle(color: whiteColor)),
+                      ),
                       ),
                     ],
                   )

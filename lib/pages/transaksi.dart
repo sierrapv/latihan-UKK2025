@@ -319,14 +319,14 @@ class _TransaksiPageState extends State<TransaksiPage> {
             SizedBox(height: 16),
 
             // Form untuk menambah produk
-            Text("Bayar", style: eightTextStyle),
+            Text("Cash", style: eightTextStyle),
             SizedBox(height: 8),
             TextField(
               controller: _paymentController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
-                hintText: "Uang pembayaran",
+                hintText: "Nominal Pembayaran",
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0)),
               ),
@@ -386,7 +386,7 @@ class _TransaksiPageState extends State<TransaksiPage> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: secondaryColor,
                   padding: EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: _simpanTransaksi,

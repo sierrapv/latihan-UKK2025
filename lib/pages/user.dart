@@ -34,6 +34,16 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
+  Widget _buildTextField(String label, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          labelText: label,
+          border:
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
+    );
+  }
+
   void _editUser(Map<String, dynamic> user) {
     showDialog(
       context: context,
@@ -48,40 +58,34 @@ class _UserPageState extends State<UserPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          title: Text("Edit User", style: TextStyle(color: secondaryColor)),
+          title: Center(
+            child: Text(
+              "Edit User",
+              style: secondTextStyle.copyWith(fontSize: 18),
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                  labelText: "Username",
-                  labelStyle: TextStyle(color: secondaryColor),
-                ),
-              ),
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  labelStyle: TextStyle(color: secondaryColor),
-                ),
-              ),
+              _buildTextField("Username", usernameController),
+              SizedBox(height: 10),
+              _buildTextField("Email", emailController),
+              SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 value: selectedRole,
                 items: ['Admin', 'Pegawai'].map((role) {
                   return DropdownMenuItem<String>(
                     value: role,
-                    child: Text(role, style: TextStyle(color: secondaryColor)),
+                    child: Text(role, style: TextStyle(color: blackColor)),
                   );
                 }).toList(),
                 onChanged: (newValue) {
-                  setState(() {
-                    selectedRole = newValue;
-                  });
+                  selectedRole = newValue;
                 },
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: greyColor, width: 2.0),
+                  labelText: "Role",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
@@ -91,26 +95,37 @@ class _UserPageState extends State<UserPage> {
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                _ubahPassword(user); // Memanggil popup untuk mengubah password
+                _ubahPassword(user);
               },
-              child: Text("Ubah Password", style: TextStyle(color: Colors.red)),
+              style: TextButton.styleFrom(
+                backgroundColor: fiveColor,
+                foregroundColor: whiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text("Ubah Password"),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Batal", style: TextStyle(color: secondaryColor)),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.red[900],
+                foregroundColor: whiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text("Batal"),
             ),
             TextButton(
               onPressed: () async {
-                // Get updated values
                 String updatedUsername = usernameController.text.trim();
                 String updatedEmail = emailController.text.trim();
-                String updatedRole =
-                    selectedRole ?? 'Admin'; // Use 'Admin' as default if null
+                String updatedRole = selectedRole ?? 'Admin';
 
                 if (updatedUsername.isNotEmpty && updatedEmail.isNotEmpty) {
-                  // Update user in Supabase
                   final response = await supabase.from('users').update({
                     'username': updatedUsername,
                     'email': updatedEmail,
@@ -119,25 +134,32 @@ class _UserPageState extends State<UserPage> {
 
                   if (response == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('User updated successfully!')),
+                      SnackBar(content: Text('Perubahan berhasil disimpan!')),
                     );
-                    fetchUsers(); // Refresh the user list
-                    Navigator.pop(context); // Close the dialog
+                    fetchUsers();
+                    Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error updating user!')),
+                      SnackBar(
+                          content: Text('Perubahan tidak dapat disimpan!')),
                     );
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Username and email cannot be empty')),
+                        content:
+                            Text('Username dan email tidak boleh kosong!')),
                   );
                 }
               },
-              child: Text("Simpan",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: secondaryColor)),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.indigo[900],
+                foregroundColor: whiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text("Simpan"),
             ),
           ],
         );
@@ -155,27 +177,32 @@ class _UserPageState extends State<UserPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          title: Text("Ubah Password", style: TextStyle(color: secondaryColor)),
+          title: Text("Ubah Password",
+              textAlign: TextAlign.center,
+              style: secondTextStyle.copyWith(fontSize: 18)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Password Baru",
-                  labelStyle: TextStyle(color: secondaryColor),
-                ),
-              ),
+              _buildTextField("Password Baru", passwordController),
+              SizedBox(height: 10),
             ],
           ),
           actions: [
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Batal", style: TextStyle(color: secondaryColor)),
+              style: TextButton.styleFrom(
+                  backgroundColor: Colors.red[900],
+                  foregroundColor: whiteColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+              child: Text("Batal"),
             ),
+            SizedBox(width: 10),
             TextButton(
               onPressed: () async {
                 final newPassword = passwordController.text.trim();
@@ -189,7 +216,7 @@ class _UserPageState extends State<UserPage> {
                     },
                   ).eq('id', user['id']);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Password updated successfully!')));
+                      content: Text('Password telah berhasil di ganti!')));
                   Navigator.pop(
                       context); // Menutup dialog setelah password diubah
                 } else {
@@ -197,11 +224,18 @@ class _UserPageState extends State<UserPage> {
                       SnackBar(content: Text('Password tidak boleh kosong')));
                 }
               },
-              child: Text("Simpan",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: secondaryColor)),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.indigo[900],
+                foregroundColor: whiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text("Simpan"),
             ),
-          ],
+            ],
+          ),
+          ]
         );
       },
     );
@@ -227,23 +261,56 @@ class _UserPageState extends State<UserPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          title: Text("Hapus User", style: TextStyle(color: secondaryColor)),
+          title: Text("Hapus User",
+              textAlign: TextAlign.center,
+              style: secondTextStyle.copyWith(fontSize: 18)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [Text("Anda yakin ingin menghapus user ini?")],
+            children: [
+              Text(
+                "Anda yakin ingin menghapus user ini?",
+                textAlign: TextAlign.center,
+                style: sevenTextStyle,
+              )
+            ],
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Batal", style: TextStyle(color: secondaryColor)),
-            ),
-            TextButton(
-              onPressed: () => _destroyUser(user['id']),
-              child: Text("Hapus",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: secondaryColor)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: 80,
+                  height: 40,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.indigo[900],
+                      foregroundColor: whiteColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Tidak"),
+                  ),
+                ),
+                SizedBox(
+                  width: 80,
+                  height: 40,
+                  child: TextButton(
+                    onPressed: () => _destroyUser(user['id']),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.red[900],
+                      foregroundColor: whiteColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Iya"),
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -336,7 +403,7 @@ class _UserPageState extends State<UserPage> {
                     title: Text(
                       user['username'],
                       style: sevenTextStyle.copyWith(
-                          fontWeight: FontWeight.bold, color: secondaryColor),
+                          fontWeight: FontWeight.bold, fontSize: 16, color: secondaryColor),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
