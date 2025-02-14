@@ -15,22 +15,50 @@ class Welcomepages extends StatefulWidget {
 class _WelcomepagesState extends State<Welcomepages> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  String? _emailError;
+  String? _passwordError;
 
   Future _handleLogin() async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    setState(() {
+      _emailError = null;
+      _passwordError = null;
+    });
 
-    final isSuccess = await auth(email, password);
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
-    if (isSuccess) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BottomBar()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Email atau Password Anda salah!")));
+    if (email.isEmpty) {
+      setState(() {
+        _emailError = "Email tidak boleh kosong";
+      });
+      return;
     }
+
+    if (password.isEmpty) {
+      setState(() {
+        _passwordError = "Password tidak boleh kosong";
+      });
+      return;
+    }
+
+    final errorMessage = await auth(email, password);
+
+    if (errorMessage != null) {
+      setState(() {
+        if (errorMessage.contains("Email")) {
+          _emailError = errorMessage;
+        } else {
+          _passwordError = errorMessage;
+        }
+      });
+      return;
+    }
+
+    // Jika sukses login
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => BottomBar()),
+    );
   }
 
   bool _isPasswordVisible = false;
@@ -75,6 +103,7 @@ class _WelcomepagesState extends State<Welcomepages> {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(color: greyColor, width: 2.0),
                 ),
+                errorText: _emailError, // Tambahkan ini
               ),
             ),
             const SizedBox(
@@ -89,8 +118,7 @@ class _WelcomepagesState extends State<Welcomepages> {
             ),
             TextField(
               controller: _passwordController,
-              obscureText:
-                  !_isPasswordVisible, //field memasukkan sandi dengan biar bisa dilihat - disensor
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 hintText: 'Masukkan Kata Sandi',
                 hintStyle: fourthTextStyle.copyWith(
@@ -105,8 +133,7 @@ class _WelcomepagesState extends State<Welcomepages> {
                   icon: Icon(
                     _isPasswordVisible
                         ? Icons.visibility
-                        : Icons
-                            .visibility_off, //logika yang mengubah sandi bisa dilihat atau tidak
+                        : Icons.visibility_off,
                     color: greyColor,
                   ),
                   onPressed: () {
@@ -115,6 +142,7 @@ class _WelcomepagesState extends State<Welcomepages> {
                     });
                   },
                 ),
+                errorText: _passwordError, // Tambahkan ini
               ),
             ),
             const SizedBox(

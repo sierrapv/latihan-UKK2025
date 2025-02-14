@@ -6,28 +6,32 @@ import 'package:latihankasirapp/pages/welcomepages.dart';
 
 final supabase = Supabase.instance.client;
 
-Future auth(String email, String password) async {
-  try{
+Future<String?> auth(String email, String password) async {
+  try {
     final response = await supabase
-      .from('users')
-      .select('id, password') //select data yang akan digunakan
-      .eq('email', email) //pengecekan email
-      .maybeSingle(); //data kosong atau 1
+        .from('users')
+        .select('id, password')
+        .eq('email', email)
+        .maybeSingle();
 
-    final hashedPassword = response!['password']; //cek password inputan users apakah sudah sama dengan enkripsi yang ada
+    if (response == null) {
+      return "Email tidak terdaftar";
+    }
+
+    final hashedPassword = response['password'];
     final userId = response['id'].toString();
 
-    if (BCrypt.checkpw(password, hashedPassword)) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_id', userId);
-
-      return true;
-    } else {
-      return false;
+    if (!BCrypt.checkpw(password, hashedPassword)) {
+      return "Password salah";
     }
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_id', userId);
+
+    return null; // Login berhasil
   } catch (e) {
     print("Error: $e");
-    return false;
+    return "Terjadi kesalahan, silakan coba lagi";
   }
 }
 
