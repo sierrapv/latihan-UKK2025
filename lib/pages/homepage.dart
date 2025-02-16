@@ -61,14 +61,6 @@ class _HomePageState extends State<HomePage> {
             children: [
               Homeappbar(),
               Container(
-                padding: EdgeInsets.only(top: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35),
-                    topRight: Radius.circular(35),
-                  ),
-                ),
                 child: Column(
                   children: [
                     Container(
@@ -78,17 +70,18 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                            color: Colors.grey
+                                .shade300), // Tambahkan border agar lebih jelas
                       ),
                       child: Row(
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(left: 5),
-                            height: 50,
-                            width: 300,
+                          Expanded(
                             child: TextFormField(
                               decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Ketik untuk cari..."),
+                                border: InputBorder.none,
+                                hintText: "Ketik untuk cari...",
+                              ),
                               onChanged: (value) {
                                 setState(() {
                                   searchQuery = value.toLowerCase();
@@ -96,41 +89,40 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                           ),
-                          Spacer(),
                           Icon(
                             Icons.search,
                             size: 27,
-                          )
+                          ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Daftar Produk",
-                        style: sixTextStyle.copyWith(fontSize: 18)),
-                    ElevatedButton(
-                      onPressed: () {
-                        showCreateProductModal(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
+                    style: sixTextStyle.copyWith(
+                      fontSize: 18,
+                      color: secondaryColor,
+                    ),
+                    ),
+                    IconButton(
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: fourthColor,
+                        ),
                         padding: EdgeInsets.all(10),
-                        backgroundColor: fourthColor,
+                        child: Icon(Icons.add, color: whiteColor),
                       ),
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
+                      onPressed: () {showCreateProductModal(context);},
                     )
                   ],
-                ),
+                )
               ),
               ItemWidget(
                 key: itemWidgetKey,

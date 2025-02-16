@@ -34,89 +34,93 @@ class _PelangganPageState extends State<PelangganPage> {
 
   // Add a new customer
   void _tambahPelanggan() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      TextEditingController namaController = TextEditingController();
-      TextEditingController alamatController = TextEditingController();
-      TextEditingController kontakController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController namaController = TextEditingController();
+        TextEditingController alamatController = TextEditingController();
+        TextEditingController kontakController = TextEditingController();
 
-      Future _addPelanggan() async {
-        final nama = namaController.text;
-        final alamat = alamatController.text;
-        final kontak = kontakController.text;
+        Future _addPelanggan() async {
+          final nama = namaController.text;
+          final alamat = alamatController.text;
+          final kontak = kontakController.text;
 
-        final response = await supabase.from('pelanggan').insert({
-          'nama': nama,
-          'alamat': alamat,
-          'noTelp': kontak,
-        });
+          final response = await supabase.from('pelanggan').insert({
+            'nama': nama,
+            'alamat': alamat,
+            'noTelp': kontak,
+          });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Pelanggan berhasil ditambahkan!')),
-        );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Pelanggan berhasil ditambahkan!')),
+          );
 
-        fetchPelanggan();
-        Navigator.pop(context);
-      }
+          fetchPelanggan();
+          Navigator.pop(context);
+        }
 
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        title: Center(
-          child: Text(
-            "Tambah Pelanggan",
-            style: secondTextStyle.copyWith(fontSize: 18),
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
           ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            buildTextField("Nama Pelanggan", namaController),
-            SizedBox(height: 10),
-            buildTextField("Alamat", alamatController),
-            SizedBox(height: 10),
-            buildTextField("No. Telepon", kontakController),
+          title: Center(
+            child: Text(
+              "Tambah Pelanggan",
+              style: secondTextStyle.copyWith(fontSize: 18),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildTextField("Nama Pelanggan", namaController),
+              SizedBox(height: 10),
+              buildTextField("Alamat", alamatController),
+              SizedBox(height: 10),
+              buildTextField("No. Telepon", kontakController),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[900],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text("Batal", style: TextStyle(color: Colors.white)),
+            ),
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: _addPelanggan,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo[900],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text("Simpan", style: TextStyle(color: Colors.white)),
+            ),
           ],
-        ),
-        actionsAlignment: MainAxisAlignment.center,
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[900],
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-            child: Text("Batal", style: TextStyle(color: Colors.white)),
-          ),
-          SizedBox(width: 10),
-          ElevatedButton(
-            onPressed: _addPelanggan,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.indigo[900],
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-            child: Text("Simpan", style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
+
   // Fungsi reusable untuk membuat TextField dengan label
-Widget buildTextField(String label, TextEditingController controller, {bool isNumeric = false}) {
-  return TextField(
-    controller: controller,
-    keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
-    decoration: InputDecoration(
-      labelText: label,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-    ),
-  );
-}
+  Widget buildTextField(String label, TextEditingController controller,
+      {bool isNumeric = false}) {
+    return TextField(
+      controller: controller,
+      keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
 
   void _editPelanggan(Map<String, dynamic> pelanggan) {
     showDialog(
@@ -159,7 +163,8 @@ Widget buildTextField(String label, TextEditingController controller, {bool isNu
           ),
           title: Center(
             child: Text(
-              "Edit Pelanggan", style: secondTextStyle.copyWith(fontSize: 18),
+              "Edit Pelanggan",
+              style: secondTextStyle.copyWith(fontSize: 18),
             ),
           ),
           content: Column(
@@ -173,27 +178,29 @@ Widget buildTextField(String label, TextEditingController controller, {bool isNu
             ],
           ),
           actionsAlignment: MainAxisAlignment.center,
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[900],
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[900],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text("Batal", style: TextStyle(color: Colors.white)),
             ),
-            child: Text("Batal", style: TextStyle(color: Colors.white)),
-          ),
-          SizedBox(width: 10),
-          ElevatedButton(
-            onPressed: _updatePelanggan,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.indigo[900],
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: _updatePelanggan,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo[900],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text("Simpan", style: TextStyle(color: Colors.white)),
             ),
-            child: Text("Simpan", style: TextStyle(color: Colors.white)),
-          ),
-        ],
+          ],
         );
       },
     );
@@ -221,53 +228,53 @@ Widget buildTextField(String label, TextEditingController controller, {bool isNu
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          title:
-              Text("Hapus Pelanggan", 
+          title: Text("Hapus Pelanggan",
               textAlign: TextAlign.center,
               style: secondTextStyle.copyWith(fontSize: 18)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [Text("Anda yakin ingin menghapus pelanggan ini?",
-            textAlign: TextAlign.center,
-            style: sevenTextStyle,),
-            SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 80, // Lebar tetap
-                        height: 40, // Tinggi tetap
-                        child: TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.indigo[900],
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                          ),
-                          child: Text("Tidak",
-                            style:
-                              TextStyle(color: whiteColor, fontSize: 14)),
-                            ),
-                          ),
-                      SizedBox(
-                        width: 80, // Lebar tetap
-                        height: 40, // Tinggi tetap
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red[900],
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                          ),
-                          onPressed: () => _destroyPelanggan(pelanggan['id']),
-                          child: Text("Iya",
-                              style:
-                                  TextStyle(color: whiteColor, fontSize: 14)),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+            children: [
+              Text(
+                "Anda yakin ingin menghapus pelanggan ini?",
+                textAlign: TextAlign.center,
+                style: sevenTextStyle,
               ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: 80, // Lebar tetap
+                    height: 40, // Tinggi tetap
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.indigo[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                      child: Text("Tidak",
+                          style: TextStyle(color: whiteColor, fontSize: 14)),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 80, // Lebar tetap
+                    height: 40, // Tinggi tetap
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                      onPressed: () => _destroyPelanggan(pelanggan['id']),
+                      child: Text("Iya",
+                          style: TextStyle(color: whiteColor, fontSize: 14)),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         );
       },
     );
@@ -288,21 +295,34 @@ Widget buildTextField(String label, TextEditingController controller, {bool isNu
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Ketik untuk cari...",
-                prefixIcon: Icon(Icons.search, color: secondaryColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.0),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                  color:
+                      Colors.grey.shade300), // Border agar tampilan lebih jelas
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Ketik untuk cari...",
+                      border: InputBorder.none, // Menghilangkan border bawaan
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value.toLowerCase();
+                      });
+                    },
+                  ),
                 ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value.toLowerCase();
-                });
-              },
+                Icon(Icons.search, size: 27), // Ikon di kanan
+              ],
             ),
           ),
           Padding(
@@ -319,8 +339,14 @@ Widget buildTextField(String label, TextEditingController controller, {bool isNu
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add_circle, 
-                  color: fourthColor, size: 38),
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: fourthColor,
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.add, color: whiteColor),
+                  ),
                   onPressed: _tambahPelanggan,
                 ),
               ],
@@ -351,7 +377,9 @@ Widget buildTextField(String label, TextEditingController controller, {bool isNu
                     title: Text(
                       pelanggan['nama'],
                       style: sevenTextStyle.copyWith(
-                          fontWeight: FontWeight.bold, fontSize: 16, color: secondaryColor),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: secondaryColor),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

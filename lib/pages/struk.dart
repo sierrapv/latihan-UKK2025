@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Untuk format tanggal
+import 'package:intl/intl.dart';
 import 'package:latihankasirapp/components/bottombar.dart';
 import 'package:latihankasirapp/pages/theme.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ReceiptPage extends StatefulWidget {
   final String transactionId;
@@ -39,104 +37,92 @@ class _ReceiptPageState extends State<ReceiptPage> {
   Widget build(BuildContext context) {
     String formattedDate =
         DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now());
-
     int totalItem =
         widget.items.fold(0, (sum, item) => sum + (item['jumlah'] as int));
 
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(
-        title: Text('E-RECEIPT', style: TextStyle(color: Colors.white)),
-        backgroundColor: secondaryColor,
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BottomBar(
-                          initialIndex: 1,
-                        )),
-              );
-            },
-            icon: Icon(Icons.chevron_left, color: whiteColor,)),
-      ),
-      body: Center(
-        child: Container(
-          width: 400,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            // borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
+      body: Column(
+        children: [
+          AppBar(
+            title: Text('E-RECEIPT', style: TextStyle(color: Colors.white)),
+            backgroundColor: secondaryColor,
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BottomBar(initialIndex: 1)),
+                  );
+                },
+                icon: Icon(
+                  Icons.chevron_left,
+                  color: whiteColor,
+                )),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text('WARMINDO',
-                  style: secondTextStyle.copyWith(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black)),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('DARI SEMANGKUK MIE, LAHIR RIBUAN CERITA DAN TAWA', style: nineTextStyle),
-                ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('DITENGAH MALAM CURHATAN PANJANG ANTAR TEMAN ', style: nineTextStyle),
-                ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('HINGGA RENCANA BESAR YANG DIMULAI DARI', style: nineTextStyle),
-              ],),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('OBROLAN SEDERHANA DI MEJA WARMINDO', style: nineTextStyle),
-              ],),
-              SizedBox(height: 8,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('STRUK INI DIBUAT DENGAN SEMESTINYA OLEH PIHAK KAMI', style: nineTextStyle,),
-                ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Text('TERIMA KASIH JANGAN LUPA KEMBALI', style: nineTextStyle),
-                ]),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('No. Transaksi: ${widget.transactionId}'),
-                  Text('Petugas: ${widget.cashier}'),
-                ]),
-              Divider(),
-              ...widget.items
-                  .map((item) => buildItemRow(item['name'],
-                      item['jumlah'].toString(), formatRupiah(item['price']).toString()))
-                  .toList(),
-              Divider(),
-              buildTotalRow('Total Item', totalItem.toString(), ''),
-              buildTotalRow(
-                  'Total Belanja', '', formatRupiah(widget.totalAmount)),
-              buildTotalRow('Bayar', '', formatRupiah(widget.payment)),
-              buildTotalRow('Kembalian', '', formatRupiah(widget.change)),
-              Divider(),
-              SizedBox(height: 10),
-              Text('Tgl. $formattedDate', style: TextStyle(fontSize: 12)),
-              Text('Pelanggan: ${widget.customer}',
-                  style: TextStyle(fontSize: 12)),
-            ],
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 9)],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('WARMINDO',
+                        style: secondTextStyle.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
+                    SizedBox(height: 10),
+                    Text('DARI SEMANGKUK MIE, LAHIR RIBUAN CERITA DAN TAWA',
+                        style: nineTextStyle, textAlign: TextAlign.center),
+                    Text('DITENGAH MALAM CURHATAN PANJANG ANTAR TEMAN',
+                        style: nineTextStyle, textAlign: TextAlign.center),
+                    Text('HINGGA RENCANA BESAR YANG DIMULAI DARI',
+                        style: nineTextStyle, textAlign: TextAlign.center),
+                    Text('OBROLAN SEDERHANA DI MEJA WARMINDO',
+                        style: nineTextStyle, textAlign: TextAlign.center),
+                    SizedBox(height: 8),
+                    Text('STRUK INI DIBUAT DENGAN SEMESTINYA OLEH PIHAK KAMI',
+                        style: nineTextStyle, textAlign: TextAlign.center),
+                    Text('TERIMA KASIH JANGAN LUPA KEMBALI',
+                        style: nineTextStyle, textAlign: TextAlign.center),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('No. Transaksi: ${widget.transactionId}'),
+                        Text('Petugas: ${widget.cashier}'),
+                      ],
+                    ),
+                    Divider(),
+                    ...widget.items.map((item) => buildItemRow(
+                        item['name'],
+                        item['jumlah'].toString(),
+                        formatRupiah(item['price']).toString())),
+                    Divider(),
+                    buildTotalRow('Total Item', totalItem.toString(), ''),
+                    buildTotalRow(
+                        'Total Belanja', '', formatRupiah(widget.totalAmount)),
+                    buildTotalRow('Bayar', '', formatRupiah(widget.payment)),
+                    buildTotalRow('Kembalian', '', formatRupiah(widget.change)),
+                    Divider(),
+                    SizedBox(height: 10),
+                    Text('Tgl. $formattedDate', style: TextStyle(fontSize: 12)),
+                    Text('Pelanggan: ${widget.customer}',
+                      style: TextStyle(fontSize: 12)),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.5),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

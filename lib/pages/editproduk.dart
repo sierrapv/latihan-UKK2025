@@ -84,6 +84,7 @@ class _EditProductPageState extends State<EditProductPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
+                    width: 80,
                     child: TextButton(
                       onPressed: () => Navigator.pop(context),
                       style: TextButton.styleFrom(
@@ -96,6 +97,7 @@ class _EditProductPageState extends State<EditProductPage> {
                     ),
                   ),
                   SizedBox(
+                    width: 100,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo[900],

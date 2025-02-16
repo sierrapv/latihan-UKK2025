@@ -332,21 +332,34 @@ class _UserPageState extends State<UserPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Ketik untuk cari...",
-                prefixIcon: Icon(Icons.search, color: secondaryColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.0),
+                    Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                  color:
+                      Colors.grey.shade300), // Border agar tampilan lebih jelas
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Ketik untuk cari...",
+                      border: InputBorder.none, // Menghilangkan border bawaan
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value.toLowerCase();
+                      });
+                    },
+                  ),
                 ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value.toLowerCase();
-                });
-              },
+                Icon(Icons.search, size: 27), // Ikon di kanan
+              ],
             ),
           ),
           Padding(
@@ -363,7 +376,14 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add_circle, color: secondaryColor, size: 28),
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: fourthColor
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.add, color: whiteColor),
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
